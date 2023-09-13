@@ -48,6 +48,7 @@ export function App() {
           </p>
         </div>
 
+        {/* Form / Prompt inputs */}
         <aside className="w-80 space-y-6">
           <form className="space-y-6">
             <label 
