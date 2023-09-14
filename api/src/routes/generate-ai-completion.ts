@@ -9,11 +9,11 @@ export async function generationIACompletionRoute(app: FastifyInstance){
 
     const bodySchema = z.object({
       videoID: z.string().uuid(),
-      template: z.string(),
+      prompt: z.string(),
       temperature: z.number().min(0).max(1).default(0.5)
     })
 
-    const { videoID, template, temperature } = bodySchema.parse(req.body)
+    const { videoID, prompt, temperature } = bodySchema.parse(req.body)
 
     const video = await prisma.video.findUniqueOrThrow({
       where: {
@@ -25,7 +25,7 @@ export async function generationIACompletionRoute(app: FastifyInstance){
       return reply.status(400).send({ error: 'Vídeo transcription was not generated yet.' })
     }
 
-    const promptMessage = template.replace('{transcripition}', video.transcription)
+    const promptMessage = prompt.replace('{transcripition}', video.transcription)
 
     const response = await openai.chat.completions.create({
       model: 'gpt-3.5-turbo-16k',
